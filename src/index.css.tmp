@@ -1,0 +1,99 @@
+
+@media (max-width: 1024px) {
+  .philosophy-grid,
+  .product-layout,
+  .core-values-grid,
+  .products-grid,
+  .explore-banner-section .container {
+    grid-template-columns: 1fr !important;
+    gap: 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-bottom: 70px;
+  }
+
+  .navbar {
+    padding: 1rem !important;
+    background-color: #1b281b !important;
+    display: flex !important;
+    justify-content: space-between !important;
+  }
+
+  .nav-left {
+    display: flex !important;
+    opacity: 1 !important;
+  }
+
+  .nav-left span {
+    color: #FFFFFF !important;
+  }
+
+  .nav-links {
+    display: none !important;
+  }
+
+  .mobile-menu-toggle {
+    display: flex !important;
+    color: #FFFFFF !important;
+    z-index: 1001 !important;
+  }
+
+  .bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(248, 243, 236, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(224, 204, 164, 0.5);
+    z-index: 100;
+    justify-content: space-around;
+    padding: 0.8rem 0.5rem;
+  }
+
+  /* Grid Adjustments */
+  .category-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.8rem !important;
+  }
+
+  section {
+    padding: 4rem 1.5rem !important;
+  }
+}
+
+/* --- NEW STABLE GRID SYSTEM (Global) --- */
+.category-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
+  gap: 1.5rem !important;
+  width: 100% !important;
+}
+
+.product-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)) !important;
+  gap: 1rem !important;
+  width: 100% !important;
+}
+
+.product-mini-card {
+  background: white !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;
+  border: 1px solid rgba(27, 40, 27, 0.05) !important;
+  transition: all 0.3s ease !important;
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+}

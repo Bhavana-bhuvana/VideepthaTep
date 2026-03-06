@@ -1,55 +1,27 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, Sprout, Droplet, Pizza, Zap, Shield, Flame, ChefHat, Layers, Wheat, Waves, Cookie, Clock, Coffee, Sparkles, Smile, Utensils, Candy, Grid, List as ListIcon } from 'lucide-react';
+import { Search, Sprout, LayoutGrid, List, Star, ArrowRight, Wheat, Droplet, Shield, Clock, Smile, Flame, Pizza, Cookie, Candy, Zap, Leaf, Milk } from 'lucide-react';
 import productsData from '../data/products_full.json';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const CATEGORY_MAP = {
-    'Rice': 'Arisi',
-    'Traditional Rice': 'Arisi',
-    'Oil': 'Cold Pressed Oils',
-    'Roasted Flour': 'Flours',
-    'Roasted Flours': 'Flours',
-    'PODI ITEM': 'gandharasa-(Masala Powders)',
-    'Signature Masala': 'gandharasa-(Masala Powders)',
-    'NOODLES': 'millet Pasta',
-    'Pasta': 'millet Pasta',
-    'Pasta & Noodles': 'millet Pasta',
-    'PANCAKE': 'Waffle & Pancake Mixes',
-    'Waffle & Pancake Mixes': 'Waffle & Pancake Mixes',
-    'Millet Instant Mixes': 'ready to cook Utsaha-(Breakfast)',
-    'MIX': 'ready to cook Utsaha-(Breakfast)',
-    'VERMICELLI': 'Millet Semiya',
-    'Sweet': 'Dopamishtine-(sweets)',
-    'Healthy Sweets': 'Dopamishtine-(sweets)',
-    'Grains': 'Grains',
-    'Millet Grains': 'Grains'
+const CATEGORY_CONFIG = {
+    'Traditional Rice': { label: 'Traditional Rice', icon: <Wheat size={18} /> },
+    'Cold Pressed Oils': { label: 'Pure Oils', icon: <Droplet size={18} /> },
+    'Millet Health Mix': { label: 'Health Mix', icon: <Shield size={18} /> },
+    'Ready-to-Make Mixes': { label: 'Ready Mixes', icon: <Clock size={18} /> },
+    'Healthy Snacks': { label: 'Snacks', icon: <Smile size={18} /> },
+    'Spicy Podi & Masala': { label: 'Podi & Masala', icon: <Flame size={18} /> },
+    'Noodles & Pasta': { label: 'Noodles & Pasta', icon: <Pizza size={18} /> },
+    'Millet Cookies': { label: 'Cookies', icon: <Cookie size={18} /> },
+    'Healthy Sweets': { label: 'Sweets', icon: <Candy size={18} /> },
+    'Vathal & Papad': { label: 'Vathal & Papad', icon: <Zap size={18} /> },
+    'Vegan & Spreads': { label: 'Vegan & Spreads', icon: <Leaf size={18} /> },
+    'Millet Grains & Flours': { label: 'Grains & Flours', icon: <Wheat size={18} /> },
+    'Healthy Drinks': { label: 'Healthy Drinks', icon: <Milk size={18} /> }
 };
 
-const CATEGORY_CONFIG = {
-    'Arisi': { icon: <Waves className="w-5 h-5" />, label: 'Heritage Rice' },
-    'ready to eat Chutney': { icon: <Flame className="w-5 h-5" />, label: 'Ready Chutney' },
-    'Cold Pressed Oils': { icon: <Droplet className="w-5 h-5" />, label: 'Cold Pressed Oils' },
-    'Lentils': { icon: <Layers className="w-5 h-5" />, label: 'Lentils' },
-    'jhol-(Soup)': { icon: <Coffee className="w-5 h-5" />, label: 'Soups (Jhol)' },
-    'Flours': { icon: <Wheat className="w-5 h-5" />, label: 'Roasted Flours' },
-    'Fryums': { icon: <Zap className="w-5 h-5" />, label: 'Fryums' },
-    'Grains': { icon: <Sprout className="w-5 h-5" />, label: 'Millet Grains' },
-    'kanjika-(Health Mix)': { icon: <Shield className="w-5 h-5" />, label: 'Health Mix' },
-    'MUESLI': { icon: <Smile className="w-5 h-5" />, label: 'Muesli' },
-    'gandharasa-(Masala Powders)': { icon: <Flame className="w-5 h-5" />, label: 'Signature Masalas' },
-    'hasitu-(Millet Flours)': { icon: <ChefHat className="w-5 h-5" />, label: 'Millet Flours' },
-    'ready to cook Utsaha-(Breakfast)': { icon: <Clock className="w-5 h-5" />, label: 'Breakfast' },
-    'Millet Semiya': { icon: <Waves className="w-5 h-5" />, label: 'Semiya' },
-    'millet Pasta': { icon: <Pizza className="w-5 h-5" />, label: 'Pasta/Noodles' },
-    'Prakritik mish-(Natural Sweeteners)': { icon: <Sparkles className="w-5 h-5" />, label: 'Sweeteners' },
-    'Snacks': { icon: <Smile className="w-5 h-5" />, label: 'Healthy Snacks' },
-    'Dopamishtine-(sweets)': { icon: <Candy className="w-5 h-5" />, label: 'Healthy Sweets' },
-    'sushtocin-Cookies': { icon: <Cookie className="w-5 h-5" />, label: 'Cookies' },
-    'Vathal': { icon: <Zap className="w-5 h-5" />, label: 'Vathal' },
-    'Millet Catering': { icon: <Utensils className="w-5 h-5" />, label: 'Catering' },
-    'Nutrition Mix & Milk Powders': { icon: <Droplet className="w-5 h-5" />, label: 'Milk Powders' },
-    'Waffle & Pancake Mixes': { icon: <Pizza className="w-5 h-5" />, label: 'Waffles & Pancakes' }
-};
+const UPCOMING_CATEGORIES = [
+    'Women friendly', 'Fat builder', 'Fat burner', 'Diabetic friendly', 'Protein bars'
+];
 
 const ProductsPage = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -62,141 +34,163 @@ const ProductsPage = () => {
 
     const processedProducts = useMemo(() => {
         const items = Array.isArray(productsData) ? productsData : [];
-        const uniqueSeen = new Set();
-
-        return items.map(p => {
-            let title = p.Title || p.ItemName || '';
-            if (!title) return null;
-
-            // Simple cleaning: keep the most meaningful part of the name
-            let cleanTitle = title.replace(/\d+\s*(?:kg|g|ml|l|grams|packets|pcs|packs|nos|no|units|lb)\b/gi, '')
-                .replace(/\b\d+X\d+\b/gi, '')
-                .replace(/\(\d+.*?\)/gi, '')
-                .replace(/\d+%/g, '')
-                .replace(/\s*-\s*$/, '') // Remove trailing hyphen
-                .replace(/\s*-\s*$/, '') // Dual pass for double hyphens
-                .trim();
-
-            if (uniqueSeen.has(cleanTitle.toLowerCase())) return null;
-            uniqueSeen.add(cleanTitle.toLowerCase());
-
-            let category = p.Category || 'Uncategorized';
-            if (CATEGORY_MAP[category]) {
-                category = CATEGORY_MAP[category];
-            }
-
-            return {
-                ...p,
-                DisplayTitle: cleanTitle,
-                Category: category
-            };
-        }).filter(Boolean);
+        return items.filter(p => p.Title && p.Category);
     }, []);
 
     const filteredProducts = useMemo(() => {
         return processedProducts.filter(p => {
-            const matchesSearch = p.DisplayTitle.toLowerCase().includes(searchQuery.toLowerCase());
+            const matchesSearch = p.Title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                p.Category.toLowerCase().includes(searchQuery.toLowerCase());
             const matchesCategory = !selectedCategory || p.Category === selectedCategory;
             return matchesSearch && matchesCategory;
         });
     }, [processedProducts, searchQuery, selectedCategory]);
 
     return (
-        <div className="products-page-wrapper bg-sand/30 pt-24 pb-20 min-h-screen">
-            <div className="container mx-auto px-4">
-                <div className="mb-8">
-                    <div className="flex flex-col gap-6">
-                        <div className="flex justify-between items-end">
-                            <div>
-                                <h1 className="text-3xl md:text-5xl font-serif text-forest mb-2">Our Collection</h1>
-                                <p className="text-bark opacity-60 italic text-sm md:text-lg">Exploring {processedProducts.length}+ traditional foods for modern lifestyle.</p>
-                            </div>
-                            <div className="flex items-center gap-2 bg-white/40 p-1.5 rounded-xl border border-forest/10 shadow-sm hide-mobile">
-                                <button
-                                    onClick={() => setViewMode('grid')}
-                                    className={`p-2.5 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-forest text-sand shadow-lg' : 'text-forest/60 hover:bg-forest/5'}`}
-                                >
-                                    <Grid size={22} />
-                                </button>
-                                <button
-                                    onClick={() => setViewMode('list')}
-                                    className={`p-2.5 rounded-lg transition-all ${viewMode === 'list' ? 'bg-forest text-sand shadow-lg' : 'text-forest/60 hover:bg-forest/5'}`}
-                                >
-                                    <ListIcon size={22} />
-                                </button>
-                            </div>
-                        </div>
+        <div className="products-page-wrapper pt-40 pb-32 min-h-screen" style={{ backgroundColor: 'var(--p-sand)' }}>
+            <div className="container mx-auto px-8">
 
-                        {/* Search Area */}
-                        <div className="relative group w-full">
-                            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-forest/40 group-focus-within:text-forest transition-colors" size={20} />
+                {/* Header Section */}
+                <div className="text-center mb-20">
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="inline-block px-4 py-1.5 bg-gold-light text-terra text-[10px] font-black uppercase tracking-[0.4em] rounded-full mb-6"
+                    >
+                        Pure Village Goodness
+                    </motion.div>
+                    <h1 className="text-7xl font-serif text-forest mb-6 tracking-tight leading-none uppercase">VILLAGE TREASURES</h1>
+                    <p className="text-forest/40 uppercase tracking-[0.2em] text-xs font-bold max-w-xl mx-auto">
+                        Nature-first products meticulously prepared for your healthy lifestyle, following our grandma's traditional recipes.
+                    </p>
+                </div>
+
+                {/* Main Filter Section */}
+                <div className="max-w-6xl mx-auto mb-20">
+                    <div className="flex flex-col lg:flex-row gap-8 items-stretch">
+                        <div className="flex-1 search-container-premium py-2">
+                            <Search className="search-icon-premium ml-2" size={24} strokeWidth={3} />
                             <input
                                 type="text"
-                                placeholder="Search products..."
-                                className="w-full pl-14 pr-6 py-4 bg-white border border-forest/20 rounded-2xl focus:outline-none focus:ring-4 focus:ring-forest/5 shadow-md text-lg text-forest placeholder:text-forest/30"
+                                placeholder="Search our authentic collection..."
+                                className="search-input-premium pl-4"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
                         </div>
-
-                        {/* Smart Category chips - horizontally scrollable */}
-                        <div className="category-chips-scroll-container">
-                            <div className="category-chips-inner">
-                                <button
-                                    onClick={() => setSelectedCategory(null)}
-                                    className={`cat-chip ${!selectedCategory ? 'active' : ''}`}
-                                >
-                                    All Items
-                                </button>
-                                {Object.entries(CATEGORY_CONFIG).map(([key, config]) => (
-                                    <button
-                                        key={key}
-                                        onClick={() => setSelectedCategory(key)}
-                                        className={`cat-chip ${selectedCategory === key ? 'active' : ''}`}
-                                    >
-                                        <span className="cat-chip-icon">{config.icon}</span>
-                                        {config.label}
-                                    </button>
-                                ))}
-                            </div>
+                        <div className="layout-toggle-premium">
+                            <button
+                                onClick={() => setViewMode('grid')}
+                                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${viewMode === 'grid' ? 'bg-forest text-sand shadow-lg scale-105' : 'text-forest/40 hover:bg-forest/5'}`}
+                            >
+                                <LayoutGrid size={18} /> Grid
+                            </button>
+                            <button
+                                onClick={() => setViewMode('list')}
+                                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-all ${viewMode === 'list' ? 'bg-forest text-sand shadow-lg scale-105' : 'text-forest/40 hover:bg-forest/5'}`}
+                            >
+                                <List size={18} /> List
+                            </button>
                         </div>
                     </div>
                 </div>
 
-                {/* Product Area */}
+                {/* Category Slider */}
+                <div className="mb-20">
+                    <div className="flex items-center justify-between mb-8 px-2">
+                        <div className="flex items-center gap-4">
+                            <h3 className="text-lg font-serif text-forest">Categories</h3>
+                            <div className="h-[2px] w-8 bg-gold rounded-full" />
+                        </div>
+                        <button
+                            onClick={() => setSelectedCategory(null)}
+                            className="reset-filter-btn"
+                        >
+                            Reset Selection
+                        </button>
+                    </div>
+
+                    <div className="category-chips-scroll-container pb-8">
+                        <div className="category-chips-inner flex gap-4">
+                            {Object.entries(CATEGORY_CONFIG).map(([key, config]) => (
+                                <button
+                                    key={key}
+                                    onClick={() => setSelectedCategory(key)}
+                                    className={`cat-chip-premium flex items-center gap-3 ${selectedCategory === key ? 'active' : ''}`}
+                                >
+                                    <span className="opacity-60">{config.icon}</span>
+                                    {config.label}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Product Grid */}
                 <motion.div
                     layout
-                    className={`product-display-area ${viewMode === 'list' ? 'view-list' : 'view-grid'}`}
+                    className={`product-display-area ${viewMode === 'list' ? 'view-list' : 'view-grid'} gap-8`}
                 >
                     <AnimatePresence mode="popLayout">
-                        {filteredProducts.map((product) => (
+                        {filteredProducts.map((product, index) => (
                             <motion.div
-                                key={`${product.ID}-${product.DisplayTitle}`}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
+                                key={`${product.ID}-${product.Title}`}
+                                initial={{ opacity: 0, y: 30 }}
+                                animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, scale: 0.9 }}
-                                transition={{ duration: 0.15 }}
+                                transition={{ duration: 0.4, cubicBezier: [0.19, 1, 0.22, 1] }}
                                 layout
-                                className="product-item-card"
+                                className={`product-item-card-premium group ${index % 2 === 0 ? 'bg-vibrant-green' : 'bg-vibrant-brown'}`}
                             >
-                                <div className="card-content">
-                                    <div className="item-icon-wrapper">
-                                        {CATEGORY_CONFIG[product.Category]?.icon || <Sprout size={28} strokeWidth={1.5} />}
+                                <div className="card-content flex flex-col h-full">
+                                    <div className={`mb-6 h-40 rounded-2xl flex items-center justify-center transition-colors duration-500 ${index % 2 === 0 ? 'bg-white/40 group-hover:bg-vibrant-green/50' : 'bg-white/40 group-hover:bg-vibrant-brown/50'}`}>
+                                        {CATEGORY_CONFIG[product.Category]?.icon ?
+                                            React.cloneElement(CATEGORY_CONFIG[product.Category].icon, { size: 48, strokeWidth: 1.5, className: index % 2 === 0 ? 'text-vibrant-green' : 'text-vibrant-brown' }) :
+                                            <Sprout size={48} strokeWidth={1.5} className={index % 2 === 0 ? 'text-vibrant-green' : 'text-vibrant-brown'} />
+                                        }
                                     </div>
-                                    <h3 className="item-name-text">
-                                        {product.DisplayTitle}
-                                    </h3>
+                                    <div className="item-info flex-1">
+                                        <span className={`text-[10px] font-black uppercase tracking-[0.2em] mb-2 block ${index % 2 === 0 ? 'text-vibrant-green/60' : 'text-vibrant-brown/60'}`}>
+                                            {CATEGORY_CONFIG[product.Category]?.label || product.Category}
+                                        </span>
+                                        <h3 className="text-xl font-serif leading-tight transition-colors">
+                                            {product.Title}
+                                        </h3>
+                                    </div>
+                                    <div className="mt-8 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                                        <span className={`text-[9px] font-black uppercase tracking-widest ${index % 2 === 0 ? 'text-vibrant-green' : 'text-vibrant-brown'}`}>Learn More</span>
+                                        <ArrowRight size={14} className={index % 2 === 0 ? 'text-vibrant-green' : 'text-vibrant-brown'} />
+                                    </div>
                                 </div>
                             </motion.div>
                         ))}
                     </AnimatePresence>
                 </motion.div>
 
+                {/* Upcoming Section */}
+                <div className="upcoming-section-modern">
+                    <div className="flex flex-col lg:flex-row items-center gap-10">
+                        <div className="text-center lg:text-left">
+                            <h4 className="text-2xl font-serif text-forest mb-2 flex items-center justify-center lg:justify-start gap-3">
+                                <Star size={24} className="text-gold fill-gold" /> UPCOMING
+                            </h4>
+                            <p className="text-forest/40 text-xs font-bold uppercase tracking-widest leading-relaxed">Exciting new village treasures <br /> arriving soon in our collection.</p>
+                        </div>
+                        <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3">
+                            {UPCOMING_CATEGORIES.map((label, idx) => (
+                                <div key={idx} className="upcoming-item-chip shadow-sm">
+                                    {label}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
                 {filteredProducts.length === 0 && (
-                    <div className="text-center py-32 bg-white/40 rounded-3xl border border-dashed border-forest/20">
+                    <div className="text-center py-48 border-2 border-dashed border-forest/10 rounded-[3rem]">
                         <Sprout size={64} className="mx-auto text-forest/10 mb-6" />
-                        <h3 className="text-xl font-serif text-forest/40">No Treasures Found</h3>
-                        <p className="text-bark opacity-40">Try searching for something else or explore a different category.</p>
+                        <h3 className="text-3xl font-serif text-forest opacity-20">Hidden Treasures...</h3>
+                        <p className="text-forest/20 mt-2 font-bold uppercase tracking-widest text-xs">Try a different search term or category</p>
                     </div>
                 )}
             </div>
@@ -205,3 +199,4 @@ const ProductsPage = () => {
 };
 
 export default ProductsPage;
+

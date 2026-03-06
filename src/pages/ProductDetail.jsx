@@ -52,8 +52,8 @@ const ProductDetail = () => {
 
             {/* App-like Top Bar */}
             <nav style={{ padding: '1.5rem 2rem', borderBottom: '1px solid rgba(224, 204, 164, 0.5)', display: 'flex', alignItems: 'center', position: 'sticky', top: 0, backgroundColor: 'rgba(248, 243, 236, 0.9)', backdropFilter: 'blur(10px)', zIndex: 50 }}>
-                <Link to="/" style={{ color: 'var(--color-forest)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 'bold' }}>
-                    <ArrowLeft size={24} /> Back to Village
+                <Link to="/products" style={{ color: 'var(--color-forest)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: 'bold' }}>
+                    <ArrowLeft size={24} /> Back to Catalog
                 </Link>
                 <div style={{ marginLeft: 'auto', fontSize: '1.5rem', color: 'var(--color-terra)' }}>प्राचीन</div>
             </nav>
